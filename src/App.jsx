@@ -22,10 +22,12 @@ const App = () => {
     },
   };
 
-  const fetchMovies = async () => {
+  const fetchMovies = async (query = "") => {
     setIsLoading(true);
     try {
-      const endpoint = `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
+      const endpoint = query
+        ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
+        : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
 
       const res = await fetch(endpoint, API_OPTIONS);
 
@@ -37,7 +39,6 @@ const App = () => {
         setMovieList([]);
         return;
       }
-      console.log(data.results);
       setMovieList(data.results || []);
     } catch (err) {
       console.log(err);
@@ -48,13 +49,13 @@ const App = () => {
   };
 
   useEffect(() => {
-    fetchMovies();
-  }, []);
+    fetchMovies(searchTerm);
+  }, [searchTerm]);
 
   return (
     <main>
       <div className="pattern" />
-      <img src={assets.background} className="absolute" alt="" />
+      <img src={assets.background} className="absolute w-full" alt="" />
       <div className="wrapper">
         <header>
           <img src={assets.hero} alt="Hero Banner" />
@@ -62,7 +63,6 @@ const App = () => {
             Find <span className="text-gradient">Movies</span>You'll Enjoy
             Without the Hassle
           </h1>
-          <p>Search</p>
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
           <section className="all-movies">
             <h2>All Movies</h2>
