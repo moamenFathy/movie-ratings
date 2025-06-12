@@ -14,7 +14,7 @@ const App = () => {
   const [debounceSearchTerm, setDebounceSearchTerm] = useState("");
   const [trendingMovies, setTrendingMovies] = useState([]);
 
-  useDebounce(() => setDebounceSearchTerm(searchTerm), 500, [searchTerm]);
+  useDebounce(() => setDebounceSearchTerm(searchTerm), 600, [searchTerm]);
 
   const API_BASE_URL = "https://api.themoviedb.org/3";
 
@@ -62,8 +62,9 @@ const App = () => {
       const movies = await getTrendingMovies();
 
       setTrendingMovies(movies);
-    } catch (err) {
-      console.error(`error fetching trending movies: ${err}`);
+      console.log(trendingMovies);
+    } catch (error) {
+      console.error(`Error fetching trending movies: ${error}`);
     }
   };
 
@@ -88,6 +89,21 @@ const App = () => {
           </h1>
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
+
+        {trendingMovies.length > 0 && (
+          <section className="trending">
+            <h2>Trending Movies</h2>
+            <ul>
+              {trendingMovies.map((movie, index) => (
+                <li key={movie.$id}>
+                  <p>{index + 1}</p>
+                  <img src={movie.poster_url} alt={movie.title} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         <section className="all-movies">
           <h2>All Movies</h2>
           {isLoading ? (
