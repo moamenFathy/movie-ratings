@@ -160,3 +160,57 @@
     display: none;
   }
 }
+
+.card {
+  position: relative;
+  overflow: hidden;
+  corner-shape: superellipse(0.6);
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.card img {
+  transition: transform 0.3s ease;
+}
+
+.card:hover img {
+  transform: scale(1.05);
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: background 0.3s ease, opacity 0.3s ease;
+}
+
+.card:hover .overlay {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+  opacity: 1;
+}
+
+.content {
+  position: absolute;
+  bottom: 40px;
+  background-color: transparent;
+  width: 100%;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:hover .content {
+  transform: translateY(-10px);
+}
+
+.rating {
+  @apply flex flex-row justify-center gap-1
+}
+
+.custom-flex {
+  @apply flex flex-row justify-center gap-1;
+}
+
