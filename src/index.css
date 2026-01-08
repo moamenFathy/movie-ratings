@@ -25,6 +25,7 @@
     font-family: "DM Sans", serif;
     font-optical-sizing: auto;
     background: #030014;
+    overflow-x: hidden;
   }
 
   h1 {
@@ -161,6 +162,80 @@
   }
 }
 
+.text-gradient {
+  animation: color_reverse 5s infinite;
+  background-size: 300% 300%;
+}
+
+.header_wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-bottom: 40px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  place-items: center;
+  width: 100%;
+}
+
+.header_wrapper img {
+  @apply w-[8rem] h-[11rem] md:w-[16rem] md:h-[22rem] object-cover rounded-[20px] cursor-pointer transition-transform duration-500 ease-in-out;
+  grid-area: 1 / 1;
+  overflow: hidden;
+  transform: rotate(var(--r)) translateX(var(--x));
+}
+
+.header_wrapper img:nth-child(1) {
+  --r: -12deg;
+  --x: -100px;
+  animation: rotate_left 1s ease;
+  &:hover {
+    transform: translateX(-190px) translateY(-20px) rotate(-15deg);
+    @media (max-width: 426px) {
+    transform: translateX(-50px) rotate(calc(var(--r) + 5deg));
+    }
+  }
+}
+
+.header_wrapper img:nth-child(2) {
+  --r: 0deg;
+  --x: 0px;
+  z-index: 2;
+  &:hover {
+    transform: translateY(-30px);
+  }
+}
+
+.header_wrapper img:nth-child(3) {
+  --r: 12deg;
+  --x: 100px;
+  animation: rotate_right 1s ease ;
+  &:hover {
+    transform: translateX(190px) translateY(-20px) rotate(15deg);
+    @media (max-width: 426px) {
+    transform: translateX(50px) rotate(calc(var(--r) + 5deg));
+    }
+  }
+}
+
+.header_wrapper:has(img:nth-child(1):hover) img:nth-child(2),
+.header_wrapper:has(img:nth-child(1):hover) img:nth-child(3) {
+  transform: translateX(160px) rotate(calc(var(--r) + 5deg));
+}
+
+.header_wrapper:has(img:nth-child(2):hover) img:nth-child(1) {
+  transform: translateX(-160px) rotate(calc(var(--r) - 5deg));
+}
+
+.header_wrapper:has(img:nth-child(2):hover) img:nth-child(3) {
+  transform: translateX(190px) rotate(calc(var(--r) + 5deg));
+}
+
+.header_wrapper:has(img:nth-child(3):hover) img:nth-child(1),
+.header_wrapper:has(img:nth-child(3):hover) img:nth-child(2) {
+  transform: translateX(-160px) rotate(calc(var(--r) - 5deg));
+}
+
 .card {
   position: relative;
   overflow: hidden;
@@ -214,3 +289,29 @@
   @apply flex flex-row justify-center gap-1;
 }
 
+@keyframes color_reverse {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes rotate_right {
+  from {
+    transform: translate(0, 0px) rotate(0deg);
+  }
+  to {
+    transform: translate(100px, 20px) rotate(12deg);
+  }
+}
+
+@keyframes rotate_left {
+  from {
+    transform: translate(0, 0px) rotate(0deg);
+  } 
+  to {
+    transform: translate(-100px, 20px) rotate(-12deg);
+  }
+}

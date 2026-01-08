@@ -5,6 +5,8 @@ import Spinner from "./components/Spinner";
 import MovieCard from "./components/MovieCard";
 import { useDebounce } from "react-use";
 import { getTrendingMovies, updateSearchCount } from "./appwrite.js";
+import Header from "./components/Header.jsx";
+import TrendingMovies from "./components/TrendingMovies.jsx";
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,6 +15,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [debounceSearchTerm, setDebounceSearchTerm] = useState("");
   const [trendingMovies, setTrendingMovies] = useState([]);
+  const [headerMovies, setHeaderMovies] = useState([]); // Store initial 3 movies for header
 
   useDebounce(() => setDebounceSearchTerm(searchTerm), 600, [searchTerm]);
 
@@ -46,6 +49,12 @@ const App = () => {
         return;
       }
       setMovieList(data.results || []);
+
+      // Save first 3 movies for header only on initial load (no search query)
+      if (!query && headerMovies.length === 0 && data.results.length >= 3) {
+        setHeaderMovies(data.results.slice(0, 3));
+      }
+
       if (query && data.results.length > 0) {
         await updateSearchCount(query, data.results[0]);
       }
@@ -80,28 +89,9 @@ const App = () => {
       <div className="pattern" />
       <img src={assets.background} className="absolute w-full" alt="" />
       <div className="wrapper">
-        <header>
-          <img src={assets.hero} alt="Hero Banner" />
-          <h1>
-            Find <span className="text-gradient">Movies</span>You'll Enjoy
-            Without the Hassle
-          </h1>
-          <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        </header>
+        <Header headerMovies={headerMovies} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
-        {trendingMovies.length > 0 && (
-          <section className="trending">
-            <h2>Trending Movies</h2>
-            <ul>
-              {trendingMovies.map((movie, index) => (
-                <li key={movie.$id}>
-                  <p>{index + 1}</p>
-                  <img src={movie.poster_url} alt={movie.title} />
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
+        <TrendingMovies trendingMovies={trendingMovies} />
 
         <section className="all-movies">
           <h2>All Movies</h2>
